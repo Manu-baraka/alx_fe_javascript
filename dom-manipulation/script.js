@@ -19,31 +19,16 @@ function showRandomQuote() {
 }
 
 function createAddQuoteForm() {
-  // Get the input values
-  const quoteText = document.getElementById("newQuoteText").value.trim();
-  const quoteCategory = document.getElementById("newQuoteCategory").value.trim();
+ const text = document.getElementById("newQuoteText").value.trim();
+  const category = document.getElementById("newQuoteCategory").value.trim();
 
-  // Validate input
-  if (quoteText === "" || quoteCategory === "") {
-    alert("Please fill in both fields.");
-    return;
+  if (text && category) {
+    quotes.push({ text, category });
+    showRandomQuote(); // optionally show the new quote
+    document.getElementById("newQuoteText").value = "";
+    document.getElementById("newQuoteCategory").value = "";
+  } else {
+    alert("Please enter both quote and category.");
   }
-
-  // Create a new quote object
-  const newQuote = {
-    text: quoteText,
-    category: quoteCategory
-  };
-
-  // Add to the array
-  quotes.push(newQuote);
-
-  // Optionally: Display the newly added quote
-  const quoteDisplay = document.getElementById("quoteDisplay");
-  quoteDisplay.innerText = `"newQuote.text" —{newQuote.category}`;
-
-  // Clear input fields
-  document.getElementById("newQuoteText").value = "";
-  document.getElementById("newQuoteCategory").value = "";
 }
-
+document.getElementById('addQuoteButton').addEventListener('click', createAddQuoteForm);
