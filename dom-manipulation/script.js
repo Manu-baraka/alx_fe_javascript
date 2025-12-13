@@ -118,4 +118,79 @@ function filterQuotes() {
   displayQuoteList(filtered);
 }
 
+// syncing data with local storage task 4
+const SERVER_API_URL = "https://jsonplaceholder.typicode.com/posts";
 
+/* UI notification */
+function showSyncMessage(message) {
+    let notification = document.getElementById("syncNotification");
+
+    if (!notification) {
+        notification = document.createElement("div");
+        notification.id = "syncNotification";
+        document.body.appendChild(notification);
+    }
+
+    notification.textContent = message;
+
+    setTimeout(() => {
+        notification.textContent = "";
+    }, 3000);
+}
+
+/* POST local quotes to server (async/await) */
+async function postQuotesToServer() {
+    try {
+        const response = await fetch(SERVER_API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(quotes)
+        });
+        await response.json();
+        showSyncMessage("Local quotes sent to server.");
+    } catch (error) {
+        console.error("POST failed:", error);
+    }
+}
+
+/* Sync logic (server wins, async/await) */
+async function syncQuotes() {
+    try {
+        const response = await fetch(SERVER_API_URL);
+        const serverData = await response.json();
+
+        const serverQuotes = serverData.slice(0, 5).map(item => ({
+            text: item.title,
+            category: "Server"
+        }));
+
+        let updated = false;
+
+        serverQuotes.forEach(serverQuote => {
+            const exists = quotes.some(
+                localQuote => localQuote.text === serverQuote.text
+            );
+
+            if (!exists) {
+                quotes.push(serverQuote);
+                updated = true;
+            }
+        });
+
+        if (updated) {
+            saveQuotes();
+            populateCategories();
+            showSyncMessage("Quotes synced with server!");
+        }
+    } catch (error) {
+        console.error("Sync failed:", error);
+    }
+}
+
+/* Required by ALX: fetchQuotesFromServer */
+async function fetchQuotesFromServer() {
+    await syncQuotes();
+}
+
+/* Periodic server sync (every 30 seconds) */
+setInterval(fetchQuotesFromServer, 30000);
