@@ -1,3 +1,4 @@
+// script.js task 1
 const quotes = [
     { text: "Be yourself; everyone else is already taken.", category: "Inspiration" },
     { text: "Code is like humor. When you have to explain it, it's bad.", category: "Programming" },
@@ -41,6 +42,8 @@ document.addEventListener("DOMContentLoaded", function() {
   showRandomQuote(); // Show one on load
 });
 
+
+// Local Storage Functions task 2
 function saveQuotes() {
   localStorage.setItem("quotes", JSON.stringify(quotes));
 }
@@ -83,3 +86,36 @@ function importFromJsonFile(event) {
 document.getElementsByTagName("button")[2].addEventListener("click", exportToJson);
 document.getElementById("importFile").addEventListener("change", importFromJsonFile);
 loadQuotes();
+
+// Dynamic Quote Display task 3
+ function populateCategories() {
+  const filter = document.getElementById("categoryFilter");
+  const categories = ["all", ...new Set(quotes.map(q => q.category))];
+
+  filter.innerHTML = "";
+  categories.forEach(category => {
+    const option = document.createElement("option");
+    option.value = category;
+    option.textContent = category;
+    filter.appendChild(option);
+  });
+
+  // Restore last selected filter
+  const lastSelected = localStorage.getItem("selectedCategory") || "all";
+  filter.value = lastSelected;
+}
+
+document.addEventListener("DOMContentLoaded", populateCategories);
+
+function filterQuotes() {
+  const selected = document.getElementById("categoryFilter").value;
+  localStorage.setItem("selectedCategory", selected);
+
+  const filtered = selected === "all"
+    ? quotes
+    : quotes.filter(q => q.category === selected);
+
+  displayQuoteList(filtered);
+}
+
+
