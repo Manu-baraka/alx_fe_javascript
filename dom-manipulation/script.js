@@ -1,6 +1,8 @@
 const quotes = [
-  { text: "Stay hungry, stay foolish.", category: "Motivation" },
-  { text: "Talk is cheap. Show me the code.", category: "Tech" },
+    { text: "Stay hungry, stay foolish.", category: "Motivation" },
+    { text: "Talk is cheap. Show me the code.", category: "Tech" },
+    { text: "First, solve the problem. Then, write the code.", category: "Problem Solving" },
+    { text: "Experience is the name everyone gives to their mistakes.", category: "Life" },
 ];
 
 function showRandomQuote() {
@@ -26,6 +28,6 @@ function createAddQuoteForm() {
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("newQuote").addEventListener("click", showRandomQuote);
-  document.getElementById("addQuoteButton").addEventListener("click", addQuote);
+  document.getElementById("addQuoteButton").addEventListener("click", createAddQuoteForm);
   showRandomQuote(); // Show one on load
 });
