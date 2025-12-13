@@ -6,17 +6,13 @@ const quotes = [
   ];
     
 function showRandomQuote() {
-  if (quotes.length === 0) 
-    return;
-
   const randomIndex = Math.floor(Math.random() * quotes.length);
   const Quote = quotes[randomIndex];
 
   const quoteDisplay = document.getElementById("quoteDisplay");
-  quoteDisplay.textContent = `${Quote.text}" —${Quote.category}`;
+  quoteDisplay.innerHTML = `<p>"${Quote.text}" - ${Quote.category}</p>`;
+
 }
-
-
 function createAddQuoteForm() {
  const text = document.getElementById("newQuoteText").value.trim();
   const category = document.getElementById("newQuoteCategory").value.trim();
